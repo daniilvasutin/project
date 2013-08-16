@@ -1,0 +1,114 @@
+<project xmlns:ivy="antlib:org.apache.ivy.ant" name="WebAppBuilder" default="deploy" basedir="../../../" >
+    <property file="src/main/resource/build.properties" />
+    <!--<ivy:settings file="ivysettings.xml" />-->
+
+    <path id="classpath">
+        <fileset dir="src/main/webapp/WEB-INF/lib/hibernate" includes="*.jar"/>
+    </path>
+
+    <target name="bootstrap" description="Used to install the ivy task jar">
+        <mkdir dir="${user.home}/.ant/lib"/>
+        <get dest="${user.home}/.ant/lib/ivy.jar"
+             src="http://search.maven.org/remotecontent?filepath=org/apache/ivy/ivy/2.2.0/ivy-2.2.0.jar"/>
+    </target>
+
+    <target name="resolve" description="-------->>>>>>>RESOLVE START">
+        <ivy:retrieve file="src/main/resource/ivy.xml" />
+    </target>
+
+    <target name="clean">
+        <echo>Cleaning the ${build.dir}</echo>
+        <delete dir="${build.dir}"/>
+    </target>
+
+    <target name="init" depends="clean">
+        <echo>Creating the build directory</echo>
+        <mkdir dir="${build.dir}/WEB-INF/classes"/>
+        <mkdir dir="${build.dir}/WEB-INF/lib"/>
+    </target>
+
+    <target name="compile" depends="init">
+        <echo>Compile the source files</echo>
+        <javac srcdir="${src.main.dir}/java" destdir="${build.dir}/WEB-INF/classes">
+            <classpath refid="classpath"/>
+        </javac>
+    </target>
+
+    <target name="copy" depends="compile">
+        <copy todir="${build.dir}">
+            <fileset dir="${src.main.dir}/webapp"/>
+        </copy>
+        <move todir="build/WEB-INF/lib">
+            <fileset dir="build/WEB-INF/lib/hibernate" includes="*.jar"/>
+        </move>
+        <delete dir="build/WEB-INF/lib/hibernate"/>
+        <copy todir="${build.dir}/WEB-INF/classes" file="${src.main.dir}/resource/hibernate.cfg.xml"/>
+    </target>
+
+    <target name="war" depends="copy">
+        <echo>Building the war file</echo>
+        <war destfile="${dist.dir}/${project.name}.war" webxml="${build.dir}/WEB-INF/web.xml">
+            <fileset dir="${build.dir}"/>
+        </war>
+    </target>
+
+    <!--Start-stop-deploy-tomcat-->
+    <path id="tomcat.class.path">
+        <fileset dir="${tomcat.home}/lib">
+            <include name="**/*.jar"/>
+            <include name="**/*.zip"/>
+        </fileset>
+        <pathelement location="${tomcat.home}/bin/bootstrap.jar"/>
+        <pathelement location="${tomcat.home}/bin/tomcat-juli.jar"/>
+    </path>
+
+    <target name="deploy" depends="war">
+        <sequential>
+            <antcall target="tomcat-stop"/>
+            <delete dir="${tomcat.home}/webapps/${dist.context}" failonerror="false"/>
+            <copy file="${dist.dir}/${dist.filename}" todir="${tomcat.home}/webapps"/>
+            <antcall target="tomcat-start"/>
+        </sequential>
+    </target>
+
+    <target name="tomcat-start">
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="true"
+              classpathref="tomcat.class.path">
+            <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+        </java>
+    </target>
+
+    <target name="tomcat-stop" depends="tomcat-check-status" if="tomcat.started">
+        <java classname="org.apache.catalina.startup.Bootstrap" fork="true"
+              classpathref="tomcat.class.path">
+            <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
+            <arg line="stop"/>
+        </java>
+        <!--<sleep seconds="5"/>-->
+    </target>
+
+    <target name="tomcat-check-status">
+        <condition property="tomcat.started">
+            <socket server="localhost" port="8080"/>
+        </condition>
+    </target>
+
+    <!--jetty-->
+    <path id="jetty.plugin.classpath">
+        <fileset dir="src/main/webapp/WEB-INF/lib/jetty-lib" includes="*.jar"/>
+    </path>
+    <taskdef classpathref="jetty.plugin.classpath" resource="tasks.properties" loaderref="jetty.loader"/>
+    <typedef name="selectChannelConnector" classname="org.eclipse.jetty.server.nio.SelectChannelConnector"
+             classpathref="jetty.plugin.classpath" loaderref="jetty.loader"/>
+
+
+    <target name="jetty.run" depends="war">
+        <jetty tempDirectory="jetty-temp">
+            <connectors>
+                <selectChannelConnector port="9090"/>
+            </connectors>
+            <webapp name="webapp" warfile="dist/project.war" contextpath="/"/>
+        </jetty>
+    </target>
+
+</project>

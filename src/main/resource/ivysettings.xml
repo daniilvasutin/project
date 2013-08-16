@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ivysettings>
+    <settings defaultCacheDir="${user.home}/.ivy2/cache" defaultResolver="ibiblio"/>
+    <resolvers>
+        <url name="ibiblio" m2compatible="true">
+            <artifact pattern="http://www.ibiblio.org/maven2/[organisation]/[module]/[revision]/[artifact]-[revision].[ext]"/>
+        </url>
+    </resolvers>
+</ivysettings>
