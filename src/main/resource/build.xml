@@ -1,10 +1,6 @@
 <project xmlns:ivy="antlib:org.apache.ivy.ant" name="WebAppBuilder" default="deploy" basedir="../../../" >
     <property file="src/main/resource/build.properties" />
-    <!--<ivy:settings file="ivysettings.xml" />-->
-
-    <path id="classpath">
-        <fileset dir="src/main/webapp/WEB-INF/lib/hibernate" includes="*.jar"/>
-    </path>
+    <ivy:settings file="${src.main.dir}/resource/ivysettings.xml" />
 
     <target name="bootstrap" description="Used to install the ivy task jar">
         <mkdir dir="${user.home}/.ant/lib"/>
@@ -12,8 +8,9 @@
              src="http://search.maven.org/remotecontent?filepath=org/apache/ivy/ivy/2.2.0/ivy-2.2.0.jar"/>
     </target>
 
-    <target name="resolve" description="-------->>>>>>>RESOLVE START">
-        <ivy:retrieve file="src/main/resource/ivy.xml" />
+    <target name="resolve" >
+        <ivy:resolve file="src/main/resource/ivy.xml" />
+        <ivy:retrieve pattern="src/main/webapp/WEB-INF/lib/[conf]/[artifact]-[revision].[ext]"/>
     </target>
 
     <target name="clean">
@@ -27,8 +24,13 @@
         <mkdir dir="${build.dir}/WEB-INF/lib"/>
     </target>
 
-    <target name="compile" depends="init">
+    <target name="compile" depends="init,resolve">
         <echo>Compile the source files</echo>
+        <path id="classpath">
+            <fileset dir="${src.main.dir}/webapp/WEB-INF/lib/hibernate" includes="*.jar" />
+            <fileset dir="${src.main.dir}/webapp/WEB-INF/lib/servlet" includes="*.jar" />
+        </path>
+
         <javac srcdir="${src.main.dir}/java" destdir="${build.dir}/WEB-INF/classes">
             <classpath refid="classpath"/>
         </javac>
@@ -38,10 +40,17 @@
         <copy todir="${build.dir}">
             <fileset dir="${src.main.dir}/webapp"/>
         </copy>
+
         <move todir="build/WEB-INF/lib">
             <fileset dir="build/WEB-INF/lib/hibernate" includes="*.jar"/>
+            <fileset dir="build/WEB-INF/lib/servlet" includes="*.jar"/>
+            <fileset dir="build/WEB-INF/lib/jetty" includes="*.jar"/>
         </move>
+
         <delete dir="build/WEB-INF/lib/hibernate"/>
+        <delete dir="build/WEB-INF/lib/servlet"/>
+        <delete dir="build/WEB-INF/lib/jetty"/>
+
         <copy todir="${build.dir}/WEB-INF/classes" file="${src.main.dir}/resource/hibernate.cfg.xml"/>
     </target>
 
@@ -62,15 +71,6 @@
         <pathelement location="${tomcat.home}/bin/tomcat-juli.jar"/>
     </path>
 
-    <target name="deploy" depends="war">
-        <sequential>
-            <antcall target="tomcat-stop"/>
-            <delete dir="${tomcat.home}/webapps/${dist.context}" failonerror="false"/>
-            <copy file="${dist.dir}/${dist.filename}" todir="${tomcat.home}/webapps"/>
-            <antcall target="tomcat-start"/>
-        </sequential>
-    </target>
-
     <target name="tomcat-start">
         <java classname="org.apache.catalina.startup.Bootstrap" fork="true"
               classpathref="tomcat.class.path">
@@ -84,7 +84,6 @@
             <jvmarg value="-Dcatalina.home=${tomcat.home}"/>
             <arg line="stop"/>
         </java>
-        <!--<sleep seconds="5"/>-->
     </target>
 
     <target name="tomcat-check-status">
@@ -93,16 +92,24 @@
         </condition>
     </target>
 
+    <target name="deploy" depends="war">
+        <sequential>
+            <antcall target="tomcat-stop"/>
+            <delete dir="${tomcat.home}/webapps/${dist.context}" failonerror="false"/>
+            <copy file="${dist.dir}/${dist.filename}" todir="${tomcat.home}/webapps"/>
+            <antcall target="tomcat-start"/>
+        </sequential>
+    </target>
+
     <!--jetty-->
-    <path id="jetty.plugin.classpath">
-        <fileset dir="src/main/webapp/WEB-INF/lib/jetty-lib" includes="*.jar"/>
-    </path>
-    <taskdef classpathref="jetty.plugin.classpath" resource="tasks.properties" loaderref="jetty.loader"/>
-    <typedef name="selectChannelConnector" classname="org.eclipse.jetty.server.nio.SelectChannelConnector"
-             classpathref="jetty.plugin.classpath" loaderref="jetty.loader"/>
-
-
     <target name="jetty.run" depends="war">
+        <path id="jetty.plugin.classpath">
+            <fileset dir="src/main/webapp/WEB-INF/lib/jetty" includes="*.jar"/>
+        </path>
+        <taskdef classpathref="jetty.plugin.classpath" resource="tasks.properties" loaderref="jetty.loader"/>
+        <typedef name="selectChannelConnector" classname="org.eclipse.jetty.server.nio.SelectChannelConnector"
+                 classpathref="jetty.plugin.classpath" loaderref="jetty.loader"/>
+
         <jetty tempDirectory="jetty-temp">
             <connectors>
                 <selectChannelConnector port="9090"/>

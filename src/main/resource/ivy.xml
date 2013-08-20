@@ -2,7 +2,27 @@
 <ivy-module version="2.0">
     <info organisation="apache" module="java-example"/>
 
+    <configurations>
+        <conf name="hibernate" description="only provide hibernate lib"/>
+        <conf name="jetty" description="provide all for run jetty"/>
+        <conf name="servlet" description="provide all for work servlet"/>
+    </configurations>
+
+    <!--<publications>-->
+        <!--<artifact name="filter-hibernate" type="jar" conf="hibernate" ext="jar" />-->
+        <!--<artifact name="filter-jetty" type="jar" conf="jetty-lib" ext="jar"/>-->
+    <!--</publications>-->
+
     <dependencies>
-        <dependency org="org.slf4j" name="slf4j-api" rev="1.7.5"/>
+        <dependency org="org.hibernate" name="hibernate-core" rev="4.2.3.Final" conf="hibernate->default" />
+        <dependency org="org.postgresql" name="postgresql" rev="9.2-1003-jdbc4" conf="hibernate->default"/>
+
+        <dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="servlet->default"/>
+
+        <dependency org="org.eclipse.jetty" name="jetty-distribution" rev="8.1.0.RC5" conf="jetty->default" />
+        <dependency org="org.mortbay.jetty" name="jetty-ant" rev="7.5.0.RC2" conf="jetty->default" />
+        <dependency org="org.eclipse.jetty" name="jetty-jsp-2.1" rev="7.5.0.RC2" conf="jetty->default" />
+        <dependency org="org.mortbay.jetty" name="jsp-2.1-glassfish" rev="2.1.v20100127" conf="jetty->default" />
+
     </dependencies>
 </ivy-module>

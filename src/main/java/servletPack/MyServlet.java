@@ -9,7 +9,6 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -24,7 +23,6 @@ import java.util.List;
  * Time: 8:01
  * To change this template use File | Settings | File Templates.
  */
-@WebServlet(urlPatterns = { "/MyServlet" })
 public class MyServlet extends HttpServlet{
 
     @Override
