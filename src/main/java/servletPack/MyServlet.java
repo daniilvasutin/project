@@ -61,17 +61,17 @@ public class MyServlet extends HttpServlet{
         req.getRequestDispatcher("userInfo.jsp").forward(req, resp);
     }
 
-    private static SessionFactory configureSessionFactory() throws HibernateException {
-        Configuration configuration = new Configuration();
-        configuration.configure();
-        org.hibernate.service.ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
-        SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-        return sessionFactory;
-    }
+//    private static SessionFactory configureSessionFactory() throws HibernateException {
+//        Configuration configuration = new Configuration();
+//        configuration.configure();
+//        org.hibernate.service.ServiceRegistry serviceRegistry = new ServiceRegistryBuilder().applySettings(configuration.getProperties()).buildServiceRegistry();
+//        SessionFactory sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+//        return sessionFactory;
+//    }
 
     private void saveToDb(Users user){
 
-        SessionFactory sessionFactory = configureSessionFactory();
+        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();//configureSessionFactory();
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -82,7 +82,7 @@ public class MyServlet extends HttpServlet{
 
     private List<Users> getListOfUsersFromDb(){
 
-        SessionFactory sessionFactory = configureSessionFactory();
+        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();//configureSessionFactory();
 
         Session session = sessionFactory.openSession();
         session.beginTransaction();

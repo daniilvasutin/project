@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+
+    <persistence-unit name="ProjectPersistenceUnit">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>main.java.dto.Project</class>
+        <class>main.java.dto.Company</class>
+        <class>main.java.dto.Email</class>
+        <class>main.java.dto.Employee</class>
+        <class>main.java.dto.Log</class>
+        <class>main.java.dto.Role</class>
+        <class>main.java.dto.TestPlan</class>
+        <class>main.java.dto.Test</class>
+        <class>main.java.dto.TestResult</class>
+        <class>main.java.dto.Users</class>
+        <properties>
+            <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/CreateDB"/>
+            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+            <property name="hibernate.connection.username" value="postgres"/>
+            <property name="hibernate.connection.password" value="hoope120"/>
+            <property name="hibernate.archive.autodetection" value="class"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            <property name="hibernate.hbm2ddl.auto" value="create"/>
+        </properties>
+    </persistence-unit>
+</persistence>

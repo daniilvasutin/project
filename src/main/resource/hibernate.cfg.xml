@@ -32,7 +32,7 @@
 
         <!-- Database connection settings -->
         <property name="connection.driver_class">org.postgresql.Driver</property>
-        <property name="connection.url">jdbc:postgresql://localhost:5432/testsdb</property>
+        <property name="connection.url">jdbc:postgresql://localhost:5432/CreateDB</property>
         <property name="connection.username">postgres</property>
         <property name="connection.password">hoope120</property>
 
@@ -52,9 +52,12 @@
         <!--<property name="hibernate.use_sql_comments">true</property>-->
 
         <!-- Drop and re-create the database schema on startup -->
-        <property name="hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">create</property>
 
         <mapping class="main.java.dto.Users"/>
+        <mapping class="main.java.dto.Company"/>
+        <mapping class="main.java.dto.Project"/>
+
 
     </session-factory>
 
