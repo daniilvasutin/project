@@ -24,7 +24,7 @@
         <mkdir dir="${build.dir}/WEB-INF/lib"/>
     </target>
 
-    <target name="compile" depends="init,resolve">
+    <target name="compile" depends="init,resolve"><!--resolve-->
         <echo>Compile the source files</echo>
         <path id="classpath">
             <fileset dir="${src.main.dir}/webapp/WEB-INF/lib/hibernate" includes="*.jar" />
@@ -118,4 +118,18 @@
         </jetty>
     </target>
 
+    <!--fast-jetty-->
+    <!--<target name="jetty.fast.run">-->
+        <!--<delete dir="${build.dir}"/>-->
+        <!--<mkdir dir="${build.dir}/WEB-INF/classes"/>-->
+        <!--<mkdir dir="${build.dir}/WEB-INF/lib"/>-->
+        <!--<path id="classpath">-->
+            <!--<fileset dir="${src.main.dir}/webapp/WEB-INF/lib/hibernate" includes="*.jar" />-->
+            <!--<fileset dir="${src.main.dir}/webapp/WEB-INF/lib/servlet" includes="*.jar" />-->
+        <!--</path>-->
+
+        <!--<javac srcdir="${src.main.dir}/java" destdir="${build.dir}/WEB-INF/classes">-->
+            <!--<classpath refid="classpath"/>-->
+        <!--</javac>-->
+    <!--</target>-->
 </project>
