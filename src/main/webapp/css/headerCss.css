@@ -21,7 +21,7 @@ body
     font-family: Arial, Helvetica, sans-serif;
     color: #444;
     background: #eee url("../noise-pattern.png");
-    margin: 0;
+    margin: 0px;
     font-size: 12px;
 }
 
@@ -244,3 +244,135 @@ nav li #login-content {
     font-size: 14px;
 }
 
+#ulForUserName {
+    float: left;
+    margin-left: 72%;
+    margin-top: 6px;
+    font-size: 14px;
+}
+#ulForUserName a{
+    text-decoration: none;
+}
+
+#ulForUserName:hover {
+    background: #fff;
+}
+
+a:active{
+    color: #87CEFA;
+}
+
+a{
+    color: #000000;
+}
+
+/*#container{*/
+/*border: solid 1px #ccb29a;*/
+/*width: 99.8%;*/
+/*height: 100%;*/
+/*display: table;*/
+/*text-align: center;*/
+/*}*/
+
+#fullSiteContentDiv {
+    width: 85%;
+    height: 100%;
+    background-color: #dedede;
+    padding: 10px 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    border: solid 1px #cc2cc9;
+    font-size: 14px;
+    margin-left: auto;
+    margin-right: auto;
+    /*text-align: center;*/
+    display: table;
+}
+
+#SiteContentUserInfo{
+    width: 25%;
+    border: solid 1px #c0cc4a;
+    text-align: center;
+    float: left;
+}
+
+#SiteContentDifferentInfo{
+    width: 74.5%;
+    border: solid 1px #9c15cc;
+    float: left;
+    height: 500px;
+}
+
+#SiteContentUsernameDiv {
+    border: solid 1px #cc0000;
+    width: 60%;
+    padding-bottom: 20px;
+    font-size: 20px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10%;
+}
+
+#SiteContentUserStatistic{
+    border: solid 1px #0003cc;
+    width: 60%;
+    margin-left: auto;
+    margin-right: auto;
+    clear: left;
+}
+
+#SiteContentUserProjectCount{
+    border: solid 1px #24ccaa;
+    width: 32%;
+    float: left;
+}
+
+#SiteContentUserCompanyCount{
+    border: solid 1px #cc6c1c;
+    width: 32%;
+    float: left;
+}
+
+#SiteContentUserTestCount{
+    border: solid 1px #2539ff;
+    width: 32%;
+    float: left;
+}
+
+#SiteContetntStatisticNameDiv{
+    clear: left;
+    border: solid 1px #ff8545;
+    text-align: center;
+    width: 100%;
+    font-size: 11px;
+
+}
+
+#SiteContetntStatisticNameProject{
+    border: solid 1px #f6ff4d;
+    /*width: 32%;*/
+    margin-left: 63px;
+    float: left;
+}
+#SiteContetntStatisticNameCompany{
+    border: solid 1px #f6ff4d;
+    /*width: 32%;*/
+    margin-left: 15px;
+    float: left;
+}
+#SiteContetntStatisticNameTest{
+    border: solid 1px #f6ff4d;
+    /*width: 32%;*/
+    margin-left: 18px;
+
+    float: left;
+}
+
+#tabs{
+    width: 500px;
+    /*height: 300px;*/
+}
+div.ui-tabs.ui-widget.ui-widget-content.ui-corner-all {
+    margin-left: 100px;
+}

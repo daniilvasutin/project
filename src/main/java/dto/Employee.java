@@ -12,6 +12,7 @@ import java.util.Collection;
  * To change this template use File | Settings | File Templates.
  */
 @Entity
+@Table
 public class Employee {
 
     private int employeeId;
@@ -57,8 +58,8 @@ public class Employee {
     public void setPassword(String password) {
         this.password = password;
     }
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "FK_ROLE_ID")
+    @OneToOne(mappedBy = "employee")
+//    @JoinColumn(name = "FK_ROLE_ID")
     public Role getRole() {
         return role;
     }

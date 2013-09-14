@@ -14,10 +14,17 @@
     <!--</publications>-->
 
     <dependencies>
-        <dependency org="org.hibernate" name="hibernate-core" rev="4.2.3.Final" conf="hibernate->default" />
+        <dependency org="org.hibernate" name="hibernate-entitymanager" rev="4.2.4.Final" conf="hibernate->default"/>
         <dependency org="org.postgresql" name="postgresql" rev="9.2-1003-jdbc4" conf="hibernate->default"/>
 
-        <dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="servlet->default"/>
+        <!--<dependency org="org.hibernate" name="hibernate-core" rev="4.2.3.Final" conf="hibernate->default" />-->
+        <!--<dependency org="javax.persistence" name="persistence-api" rev="1.0.2" conf="hibernate->default"/>-->
+
+        <!--<dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="servlet->default"/>-->
+        <dependency org="org.apache.tomcat" name="tomcat-servlet-api" rev="7.0.42" conf="servlet->default" />
+
+        <!--<dependency org="javax.servlet" name="servlet-api" rev="2.4" conf="servlet->default"/>-->
+
 
         <dependency org="org.eclipse.jetty" name="jetty-distribution" rev="8.1.0.RC5" conf="jetty->default" />
         <dependency org="org.mortbay.jetty" name="jetty-ant" rev="7.5.0.RC2" conf="jetty->default" />

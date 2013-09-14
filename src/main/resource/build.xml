@@ -8,6 +8,10 @@
              src="http://search.maven.org/remotecontent?filepath=org/apache/ivy/ivy/2.2.0/ivy-2.2.0.jar"/>
     </target>
 
+    <target name="beep">
+        <echo>\0007</echo>
+    </target>
+
     <target name="resolve" >
         <ivy:resolve file="src/main/resource/ivy.xml" />
         <ivy:retrieve pattern="src/main/webapp/WEB-INF/lib/[conf]/[artifact]-[revision].[ext]"/>
@@ -45,13 +49,17 @@
             <fileset dir="build/WEB-INF/lib/hibernate" includes="*.jar"/>
             <fileset dir="build/WEB-INF/lib/servlet" includes="*.jar"/>
             <fileset dir="build/WEB-INF/lib/jetty" includes="*.jar"/>
+            <!--<fileset dir="build/WEB-INF/lib/newhiber" includes="*.jar"/>-->
         </move>
 
         <delete dir="build/WEB-INF/lib/hibernate"/>
         <delete dir="build/WEB-INF/lib/servlet"/>
         <delete dir="build/WEB-INF/lib/jetty"/>
+        <delete dir="build/META-INF"/>
+        <!--<delete dir="build/WEB-INF/lib/newhiber"/>-->
 
         <copy todir="${build.dir}/WEB-INF/classes" file="${src.main.dir}/resource/hibernate.cfg.xml"/>
+        <copydir dest="${build.dir}/WEB-INF/classes/META-INF" src="${src.main.dir}/webapp/META-INF"/>
     </target>
 
     <target name="war" depends="copy">
@@ -110,11 +118,17 @@
         <typedef name="selectChannelConnector" classname="org.eclipse.jetty.server.nio.SelectChannelConnector"
                  classpathref="jetty.plugin.classpath" loaderref="jetty.loader"/>
 
+
+
         <jetty tempDirectory="jetty-temp">
             <connectors>
                 <selectChannelConnector port="9090"/>
             </connectors>
-            <webapp name="webapp" warfile="dist/project.war" contextpath="/"/>
+            <webapp name="webapp" warfile="dist/project.war" contextpath="/" scanintervalseconds="2">
+                <scantargets dir="jetty-temp">
+                   <include name="**"/>
+                </scantargets>
+            </webapp>
         </jetty>
     </target>
 
