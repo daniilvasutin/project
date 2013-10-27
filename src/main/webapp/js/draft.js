@@ -186,3 +186,100 @@
 //        });
 //        return false;
 //    }));
+
+ $('privateOfficeBodyId').bind("load", function() {
+//        alert("load");
+//
+//    });
+
+//    $(document).on('pageinit','#privateOfficeBodyId',function(){
+//        alert("load!");
+//    });
+
+//    $('#privateOfficeBodyId').on('pageinit',function(){
+//        alert("load");
+//    });
+
+//    if(window.location == "http://localhost:9090/MyServlet"){
+//     alert("load");
+//    }
+
+//    alert(window.location);
+//    $('#privateOfficeBodyId').bind('pageshow',function(){
+//        alert("load");
+//    })
+
+//    if($('#privateOfficeBodyId').readyState == 'complete'){
+//        alert("hello");
+//    }
+
+    $('#inp').click(function(){
+        $('#listOfCompany').animate({ scrollTop: $('#listOfCompany')[0].scrollHeight - $('#listOfCompany').height() }, "slow");
+    });
+
+    //                h = $("#addCompanyDiv").height();
+
+
+  //var e = $('#registFormProjectNameOfCompany');
+  //var k = e.options[e.selectedIndex].value;
+
+  //    var obj = jQuery.parseJSON( '{ "name": "John" }' );
+  //    alert( obj.name);
+
+
+  console.log("out [] " + responseJson[0].userName + "::" + responseJson[1].userName);
+  console.log("out . " + responseJson.userName + "::" + responseJson.experience);
+  console.log("p " + project);
+  console.debug(". " + project.userName + "::" + project.experience);
+
+
+//$.post OOOORRRR $.ajax what you want
+   $('.linkToShowCompanyProject').click(function() {
+          $('#tabs').tabs('select', 1);
+
+          var thenum = this.id.replace( /^\D+/g, '');
+
+          $.ajax({
+              url: 'ShowCompanyProject',
+              type: 'POST',
+              dataType: 'json',
+              data: {companyProjectId: thenum},
+              success: function(responseJson) {
+                  $('#listOfProject').html("");
+
+                  var $table = $('<table>').appendTo($('#listOfProject'));
+
+                  $.each(responseJson, function(index, project) {
+                      var $tr1 = $('<tr>').appendTo($table).hide();
+                      $('<td>').text("Project # " ).appendTo($tr1);
+                      var $tr2 = $('<tr>').appendTo($table).hide();
+                      $('<td>').text("Name: " + project.name).appendTo($tr2);
+                      $('<td>').text("Company: " + project.companyProject).appendTo($tr2);
+
+                      $tr1.fadeIn(1000);
+                      $tr2.fadeIn(1000);
+                  });
+              }
+          });
+
+  //        $.post('ShowCompanyProject',
+  //            {companyProjectId: thenum},
+  //            function(responseJson){
+  //                $('#listOfProject').html("");
+  //
+  //                var $table = $('<table>').appendTo($('#listOfProject'));
+  //
+  //                $.each(responseJson, function(index, project) {
+  //                    var $tr1 = $('<tr>').appendTo($table).hide();
+  //                    $('<td>').text("Project # " ).appendTo($tr1);
+  //                    var $tr2 = $('<tr>').appendTo($table).hide();
+  //                    $('<td>').text("Name: " + project.name).appendTo($tr2);
+  //                    $('<td>').text("Company: " + project.companyProject).appendTo($tr2);
+  //
+  //                    $tr1.fadeIn(1000);
+  //                    $tr2.fadeIn(1000);
+  //            });
+  //        });
+
+      });
+//$.post OOOORRRR $.ajax what you want ^

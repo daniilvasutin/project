@@ -1,3 +1,8 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ page import="main.java.dto.Company" %>
+<%@ page import="java.util.List" %>
+<%@ page import="main.java.dto.Project" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html id="indexhtml">
@@ -11,14 +16,15 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <script src="../js/jqueryLib.js"></script>
+    <%--<script src="http://code.jquery.com/jquery-1.9.1.js"></script>--%>
+    <script src="../js/jquery-2.0.3.js"></script>
     <script src="../js/myScript.js"></script>
-    <script src="../js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="../js/jquery-ui-1.9.2.js"></script>
     <script type="text/javascript">
         $(function(){
             $("#tabs").tabs({
-                load: function(ui){
-                    ui.panel.html("loading");
+                select: function(event, ui) {
+                    window.location.hash = ui.tab.hash;
                 }
             });
         });
@@ -26,16 +32,16 @@
 
 </head>
 
-<body id="bodyid">
+<body id="privateOfficeBodyId">
 <jsp:include page="header.jsp"/>
 
-<%--<div id="contentPane">IT'S HELLO</div>--%>
-<%--<div id="container">--%>
 
 <div id="fullSiteContentDiv">
     <div id="SiteContentUserInfo">
         <div id="SiteContentUsernameDiv">
-            <%=session.getAttribute("sessionUsername").toString()%>
+            <c:if test="${sessionScope.sessionUsername != null}">
+                <c:out value="${sessionScope.sessionUsername}"/>
+            </c:if>
         </div>
         <hr size="2" width="165"/>
         <div id=SiteContentUserStatistic>
@@ -63,59 +69,71 @@
         </div>
     </div>
     <div id="SiteContentDifferentInfo">
-        <div id="tabs">
+        <div id="tabs" class="containerForTabs">
             <ul>
                 <li><a href="#tabs-1">Company</a></li>
-                <li><a href="../jsp/registration.jsp">Project</a></li>
+                <li><a href="#tabs-2">Project</a></li>
             </ul>
             <div id="tabs-1">
-                <p id="Yourlistofcompaniesisempty">Your list of companies is empty! <a id="addCompany" href="#">Add company.</a></p>
-                <div id="addCompanyDiv" >
-
+                <div id="listOfCompany" class="panelForTabs">
+                    <c:choose>
+                        <c:when test="${fn:length(requestScope.companies) == 0}">
+                            <p id="Yourlistofcompaniesisempty">Your list of companies is empty! <a class="addCompanyA" href="#">Add company.</a></p>
+                        </c:when>
+                        <c:otherwise>
+                            <c:set scope="session" var="companies" value="${requestScope.companies}" />
+                            <p>It's the company you work for: </p>
+                            <table id="tableOfCompany">
+                                <c:forEach var="company" items="${requestScope.companies}" varStatus="status">
+                                    <tr>
+                                        <td>Company # <c:out value="${status.count}"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td>Name: <a href="#tabs-2" id="linkToShowCompanyProjectId<c:out value='${company.companyId}'/>"
+                                                     class="linkToShowCompanyProject"><c:out value="${company.name}"/></a>
+                                        </td>
+                                        <td>Dateils: <c:out value="${company.deteils}"/></td>
+                                    </tr>
+                                </c:forEach>
+                            </table>
+                            <p id="Yourlistofcompaniesisempty">Do you want add company? <a class="addCompanyA" href="#">Add company.</a></p>
+                        </c:otherwise>
+                    </c:choose>
+                    <div id="addCompanyDiv"></div>
                 </div>
             </div>
             <div id="tabs-2">
+                <div id="listOfProject" class="panelForTabs">
 
+                    <c:choose>
+                        <c:when test="${fn:length(requestScope.projects) == 0}">
+                            <p id="Yourlistofprojectisempty">Your list of projects is empty! <a class="addProjectA" href="#">Add project.</a></p>
+                        </c:when>
+                        <c:otherwise>
+                            <p>It's the project of <c:out value="${requestScope.companies[fn:length(requestScope.companies)-1].name}"/> company: </p>
+                            <table id="tableOfProject">
+                            <c:forEach var="project" items="${requestScope.projects}" varStatus="status">
+                                <tr>
+                                    <td>Project # <c:out value="${status.count}"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Name: <a href="#tabs-2" id="<c:out value='${project.projectId}'/>"><c:out value="${project.name}"/></a></td>
+                                    <td>Company: <c:out value="${project.company.name}"/></td>
+                                </tr>
+                            </c:forEach>
+                            </table>
+                            <p id="Yourlistofprojectisempty">Do you want add project? <a class="addProjectA" href="#">Add project.</a></p>
+                        </c:otherwise>
+                    </c:choose>
+                    <div id="addProjectDiv"></div>
+                </div>
             </div>
         </div>
-
-        <p>Please enter all fields in order to add a company</p>
-        <form id="formForRegistCompany" >
-
-            <table id="tableRegistrFormCompany">
-                <tr>
-                    <td><label>Company name:</label></td><td><input id="registFormCompanyName" type="text" name="registFormCompanyName" placeholder="Write campnay name" required></td>
-                </tr>
-                <tr>
-                    <td><label>Details:</label></td><td><textarea rows="6" cols="45" id="registFormCompanyDetails" name="registFormCompanyDetails" placeholder="Write company details" style="border-color: #646464;"></textarea></td>
-                </tr>
-                <tr>
-                    <td><input type="button" value="Add company" id="formForRegistCompanySubmit"></td>
-                    <%--<td><input type="submit" value="Add company"></td>--%>
-                </tr>
-            </table>
-
-        </form>
-
     </div>
 
 </div>
 
-<%--</div>--%>
-
-
-<%--<div style="position:relative;" id="dopoln_block">--%>
-<%--<div style="background:#66AAD7; width:200px; position: absolute; top:10px; left:10px;">2<br>текст</div>--%>
-<%--</div>--%>
-
-<%--<div style="background:#FA911D; width:240px; float:left;">1</div>--%>
-<%--<div style="background:#0080C0; width:150px; float:left; ">2<br>text<br>text</div>--%>
-<%--<div style="background:#80FF00; width:130px; float:left;">3<br>текст</div>--%>
-<%--<div style="background:#36E065; clear:left;">4<br>контент<br>контент<br>контент</div>--%>
-
 <div id="loading" style="display: none">Please wait, loading...</div>
-
-
 
 </body>
 </html>

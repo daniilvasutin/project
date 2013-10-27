@@ -1,0 +1,19 @@
+query = entityManager.createQuery("SELECT c " +
+                "FROM Employee e " +
+                "JOIN e.companies c " +
+                "WHERE e.employeeId = :employeeId").setParameter("employeeId", employee.getEmployeeId());   //правельно
+
+//        query = entityManager.createQuery("SELECT c " +
+//                "FROM Company c, Employee e " +
+//                "JOIN c.employees " +
+//                "WHERE e.employeeId = :employeeId").setParameter("employeeId", employee.getEmployeeId()); //не работает т.к. главная таблица Employees
+
+//        System.out.println("!!!!!!!!!!!!" + employee.getEmployeeId() + " :: " + employee.getName() + " :: " + employee.getPassword());
+
+for(Company com : companyList){
+    System.out.println("!!!!!" + com.getName() + " :: " + com.getDeteils());
+}
+
+//        for(Company com : companyList){
+//            System.out.println("!!!!!" + com.getName() + " :: " + com.getDeteils());
+//        }

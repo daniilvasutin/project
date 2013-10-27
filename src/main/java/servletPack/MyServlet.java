@@ -1,6 +1,7 @@
 package main.java.servletPack;
 
 import com.google.gson.Gson;
+import main.java.dto.Company;
 import main.java.dto.Email;
 import main.java.dto.Employee;
 import main.java.dto.Role;
@@ -25,50 +26,13 @@ public class MyServlet extends HttpServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!" + "In AddCompanyServlet" + "!!!!!!!!!!!!!!!!!!!!!!!!!");
-
-
-//        String userName = req.getParameter("registFormUserName");
-//        String password = req.getParameter("registFormPassword");
-////        String email = req.getParameter("email");
-////        String role = req.getParameter("role");
-////        String enterAfeterRegist = req.getParameter("enter");
-//
-////        Employee employee = new Employee();
-////        employee.setName(userName);
-////        employee.setPassword(password);
-////
-////        Role roleObj = new Role();
-////        roleObj.setName(role);
-////        roleObj.setEmployee(employee);
-////
-////        Email emailObj = new Email();
-////        emailObj.setEmail(email);
-////        emailObj.setEmployee(employee);
-////
-////        saveToDb(emailObj, roleObj);
-//
-//        System.out.println(userName);
-//        System.out.println(password);
-//
-//
-//        resp.setContentType("text/html");
-//        req.getRequestDispatcher("jsp/hello.jsp").forward(req, resp);
-
-//        if (enterAfeterRegist.equals("true")){
-//            System.out.println("enter");
-//
-//
-//        }
-
-//        req.getRequestDispatcher("jsp/index.jsp").forward(req, resp);
+        req.getRequestDispatcher("jsp/privateOffice.jsp").include(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        resp.setContentType("text/html");
-//        req.getRequestDispatcher("jsp/hello.jsp").forward(req, resp);
+
+        System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!" + "In MyServletPost" + "!!!!!!!!!!!!!!!!!!!!!!!!!");
 
         String userName = req.getParameter("registFormUserName");
         String password = req.getParameter("registFormPassword");
@@ -89,14 +53,15 @@ public class MyServlet extends HttpServlet{
         emailObj.setEmployee(employee);
 
         saveToDb(emailObj, roleObj);
+        getCompanyInWitchWorkEmployee(employee);
 
-        resp.setContentType("text/html");
 
         HttpSession session = req.getSession();
         session.setAttribute("sessionUsername", userName);
 
-        resp.sendRedirect("jsp/privateOffice.jsp");
-//        req.getRequestDispatcher("jsp/hello.jsp").forward(req, resp);
+        resp.setContentType("text/html");
+        req.getRequestDispatcher("jsp/privateOffice.jsp").forward(req, resp);
+//        resp.sendRedirect("jsp/privateOffice.jsp");
 
     }
 
@@ -115,6 +80,40 @@ public class MyServlet extends HttpServlet{
         entityManager.persist(aRoleObj);
         entityManager.getTransaction().commit();
         entityManager.close();
+    }
+
+    private /*Company*/ void getCompanyInWitchWorkEmployee(Employee aEmployee){
+
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("ProjectPersistenceUnit");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        entityManager.getTransaction().begin();
+
+//        Query query = entityManager.createQuery("SELECT e " +
+//                "FROM Employee e " +
+//                "WHERE e.id = :eid").setParameter("eid", 4);
+//        Employee emp = (Employee) query.getSingleResult();
+
+//        Query query = entityManager.createQuery("SELECT c " +
+//                "FROM Company c, Employee e " +
+//                "JOIN c.employees " +
+//                "WHERE e.id = :employeeId").setParameter("employeeId", aEmployee.getEmployeeId());
+
+        Query query = entityManager.createQuery("SELECT c " +
+                "FROM Employee e " +
+                "JOIN e.companies c " +
+                "WHERE e.employeeId = :employeeId").setParameter("employeeId", 4);
+        List<Company> companyList = query.getResultList();
+
+        for(Company com : companyList){
+            System.out.println("!!!!!" + com.getName() + " :: " + com.getDeteils());
+        }
+
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+//        return ;
     }
 
     private void showAllEmployees(HttpServletResponse resp) throws IOException{

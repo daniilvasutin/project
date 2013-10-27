@@ -23,6 +23,43 @@
         <url-pattern>/AddCompany/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>Enter</servlet-name>
+        <servlet-class>main.java.servletPack.Enter</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Enter</servlet-name>
+        <url-pattern>/Enter/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>EnterByAName</servlet-name>
+        <servlet-class>main.java.servletPack.EnterByAName</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>EnterByAName</servlet-name>
+        <url-pattern>/EnterByAName/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>AddProject</servlet-name>
+        <servlet-class>main.java.servletPack.AddProject</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddProject</servlet-name>
+        <url-pattern>/AddProject/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ShowCompanyProject</servlet-name>
+        <servlet-class>main.java.servletPack.ShowCompanyProject</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowCompanyProject</servlet-name>
+        <url-pattern>/ShowCompanyProject/*</url-pattern>
+    </servlet-mapping>
+
+
     <welcome-file-list>
         <welcome-file>./jsp/index.jsp</welcome-file>
     </welcome-file-list>

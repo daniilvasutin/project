@@ -370,9 +370,17 @@ a{
 }
 
 #tabs{
-    width: 500px;
-    /*height: 300px;*/
+    width: 600px;
 }
 div.ui-tabs.ui-widget.ui-widget-content.ui-corner-all {
     margin-left: 100px;
+}
+
+.containerForTabs{
+    /*width: auto;*/
+}
+
+.panelForTabs{
+    max-height: 300px;
+    overflow: auto;
 }

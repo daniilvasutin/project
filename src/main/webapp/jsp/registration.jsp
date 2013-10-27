@@ -1,4 +1,4 @@
-<form id="formForRegist" method="post" action="/MyServlet">
+<form id="formForRegist" action="MyServlet" method="post">
 
     <table id="tableRegistrForm">
         <tr>

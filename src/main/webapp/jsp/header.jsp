@@ -1,3 +1,5 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 
@@ -6,13 +8,10 @@
 
         <ul id="ulForUserName">
 
-            <a id="enteredUserName" href="../jsp/privateOffice.jsp">
-                <%
-                    String username = (String) session.getAttribute("sessionUsername");
-                    if (username != null)  {
-                        out.println(username);
-                    }
-                %>
+            <a id="enteredUserName" href="EnterByAName">
+                <c:if test="${sessionScope.sessionUsername != null}">
+                    <c:out value="${sessionScope.sessionUsername}"/>
+                </c:if>
             </a>
         </ul>
 
@@ -22,9 +21,9 @@
                     Sign in <span>&#x25BC;</span>
                 </a>
                 <div id="login-content">
-                    <form>
+                    <form id="fromForEnterInHeaderPanel" action="Enter" method="post">
                         <fieldset id="inputs">
-                            <input id="emailInHeaderPanel" type="email" name="emailInHeaderPanel" placeholder="Write your email" required>
+                            <input id="nameInHeaderPanel" type="text" name="nameInHeaderPanel" placeholder="Write your name" required>
                             <input id="passwordInHeaderPanel" type="password" name="passwordInHeaderPanel" placeholder="Write your password" required>
                         </fieldset>
                         <fieldset id="actions">

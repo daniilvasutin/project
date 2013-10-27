@@ -14,7 +14,7 @@
 
     <target name="resolve" >
         <ivy:resolve file="src/main/resource/ivy.xml" />
-        <ivy:retrieve pattern="src/main/webapp/WEB-INF/lib/[conf]/[artifact]-[revision].[ext]"/>
+        <ivy:retrieve pattern="src/main/webapp/WEB-INF/lib/[conf]/[artifact]-[revision](-[classifier]).[ext]"/>
     </target>
 
     <target name="clean">
@@ -33,6 +33,7 @@
         <path id="classpath">
             <fileset dir="${src.main.dir}/webapp/WEB-INF/lib/hibernate" includes="*.jar" />
             <fileset dir="${src.main.dir}/webapp/WEB-INF/lib/servlet" includes="*.jar" />
+            <fileset dir="${src.main.dir}/webapp/WEB-INF/lib/gson" includes="*.jar" />
         </path>
 
         <javac srcdir="${src.main.dir}/java" destdir="${build.dir}/WEB-INF/classes">
@@ -49,12 +50,14 @@
             <fileset dir="build/WEB-INF/lib/hibernate" includes="*.jar"/>
             <fileset dir="build/WEB-INF/lib/servlet" includes="*.jar"/>
             <fileset dir="build/WEB-INF/lib/jetty" includes="*.jar"/>
+            <fileset dir="build/WEB-INF/lib/gson" includes="*.jar"/>
             <!--<fileset dir="build/WEB-INF/lib/newhiber" includes="*.jar"/>-->
         </move>
 
         <delete dir="build/WEB-INF/lib/hibernate"/>
         <delete dir="build/WEB-INF/lib/servlet"/>
         <delete dir="build/WEB-INF/lib/jetty"/>
+        <delete dir="build/WEB-INF/lib/gson"/>
         <delete dir="build/META-INF"/>
         <!--<delete dir="build/WEB-INF/lib/newhiber"/>-->
 
@@ -117,8 +120,6 @@
         <taskdef classpathref="jetty.plugin.classpath" resource="tasks.properties" loaderref="jetty.loader"/>
         <typedef name="selectChannelConnector" classname="org.eclipse.jetty.server.nio.SelectChannelConnector"
                  classpathref="jetty.plugin.classpath" loaderref="jetty.loader"/>
-
-
 
         <jetty tempDirectory="jetty-temp">
             <connectors>
