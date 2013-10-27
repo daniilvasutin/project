@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
 
-    <persistence-unit name="ProjectPersistenceUnit">
+    <persistence-unit name="ProjectPersistenceUnit" transaction-type="RESOURCE_LOCAL">
+
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <class>main.java.dto.Project</class>
         <class>main.java.dto.Company</class>
@@ -21,7 +22,7 @@
             <property name="hibernate.archive.autodetection" value="class"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
         </properties>
     </persistence-unit>
 </persistence>

@@ -1,5 +1,8 @@
 package main.java.dto;
 
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+
 import javax.persistence.*;
 
 /**
@@ -14,6 +17,7 @@ public class Role {
 
     private int roleId;
     private String name;
+    private Employee employee;
 
     public Role() {
     }
@@ -23,8 +27,9 @@ public class Role {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "PK_ROLE_ID")
+    @Column(name = "PK_ROLE_ID", unique = true, nullable = false)
+    @GeneratedValue(generator = "gen")
+    @GenericGenerator(name = "gen", strategy = "foreign", parameters = @Parameter(name = "property", value = "employee"))
     public int getRoleId() {
         return roleId;
     }
@@ -32,7 +37,6 @@ public class Role {
     public void setRoleId(int roleId) {
         this.roleId = roleId;
     }
-
     @Column(name = "NAME")
     public String getName() {
         return name;
@@ -40,6 +44,16 @@ public class Role {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
     }
 
 }

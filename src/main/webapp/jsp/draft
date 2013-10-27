@@ -1,0 +1,63 @@
+<%
+    String username = (String) session.getAttribute("sessionUsername");
+    if (username != null)  {
+        out.println(username);
+    }
+%>
+
+
+<%
+    List<Company> companies = (List<Company>) request.getAttribute("companies");
+    if(companies.size() == 0){%>
+<p id="Yourlistofcompaniesisempty">Your list of companies is empty! <a class="addCompanyA" href="#">Add company.</a></p>
+<%}else{%>
+    <%session.setAttribute("companies", companies);%>
+    <p>It's the company you work for: </p>
+    <table id="tableOfCompany">
+        <%for(Company com : companies){%>
+            <tr>
+                <td>Company # <%=companies.indexOf(com)%></td>
+            </tr>
+            <tr>
+                <td>Name: <a href="#tabs-2" id="linkToShowCompanyProjectId<%=com.getCompanyId()%>" class="linkToShowCompanyProject"><%=com.getName()%></a></td>
+                <td>Dateils: <%=com.getDeteils()%></td>
+            </tr>
+        <%}%>
+    </table>
+    <p id="Yourlistofcompaniesisempty">Do you want add company? <a class="addCompanyA" href="#">Add company.</a></p>
+<%}%>
+<div id="addCompanyDiv"></div>
+
+
+
+<%
+    List<Project> projects = (List<Project>) request.getAttribute("projects");
+    if(projects.size() == 0 ){ %>
+
+<%}else{%>
+    <p>It's the project of <%companies.get(companies.size()-1).getName();%> company: </p>
+    <table id="tableOfProject">
+        <%for(Project proj : projects){%>
+        <tr>
+            <td>Project # <%=projects.indexOf(proj)%></td>
+        </tr>
+        <tr>
+            <td>Name: <a href="#tabs-2" id="tablink1"><%=proj.getName()%></a></td>
+            <td>Company: <%=proj.getCompany().getName()%></td>
+        </tr>
+        <%}%>
+    </table>
+    <p id="Yourlistofprojectisempty">Do you want add project? <a class="addProjectA" href="#">Add project.</a></p>
+<%}%>
+<div id="addProjectDiv"></div>
+
+<%
+    List<Company> companies = (List<Company>) session.getAttribute("companies");
+    if(companies.size() == 0)
+    {%>
+    <option value="Empty">No company</option>
+<%}else{%>
+    <%for(Company com : companies){%>
+        <option value="<%=com.getCompanyId()%>"><%=com.getName()%></option>
+    <%}%>
+<%}%>

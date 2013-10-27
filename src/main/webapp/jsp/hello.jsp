@@ -10,14 +10,14 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
 
-    <script src="../js/jquery-2.0.3.js"></script>
+    <script src="../js/jquery.min.js"></script>
     <script src="../js/myScript.js"></script>
 </head>
 
-<body id="indexBodyId">
+<body>
 <jsp:include page="header.jsp"/>
 
-<div id="contentPane">Where will be ajax request</div>
+<div id="contentPane">IT'S HELLO</div>
 
 <div id="loading" style="display: none">Please wait, loading...</div>
 
