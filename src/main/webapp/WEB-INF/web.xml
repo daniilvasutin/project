@@ -51,12 +51,30 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>AddTestPlan</servlet-name>
+        <servlet-class>main.java.servletPack.AddTestPlan</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AddTestPlan</servlet-name>
+        <url-pattern>/AddTestPlan/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>ShowCompanyProject</servlet-name>
         <servlet-class>main.java.servletPack.ShowCompanyProject</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ShowCompanyProject</servlet-name>
         <url-pattern>/ShowCompanyProject/*</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ShowProjectTestPlan</servlet-name>
+        <servlet-class>main.java.servletPack.ShowProjectTestPlan</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ShowProjectTestPlan</servlet-name>
+        <url-pattern>/ShowProjectTestPlan/*</url-pattern>
     </servlet-mapping>
 
 

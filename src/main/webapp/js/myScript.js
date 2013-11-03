@@ -136,6 +136,73 @@ $(document).ready(function(){
         event.preventDefault();
     });
 
+    $('#privateOfficeBodyId').on("click",".addTestPlanA",function(){
+        $('#Yourlistoftestplanisempty').hide(400);
+        $('#addTestPlanDiv').hide();
+
+        $.ajax({
+            url: "../jsp/testPlanRegistration.jsp",
+            cache: false,
+            success: function(html){
+                $("#addTestPlanDiv").html(html);
+                $('#listOfTestPlan').animate({ scrollTop: $('#listOfTestPlan')[0].scrollHeight - $('#listOfTestPlan').height()  }, 'slow');
+            }
+        });
+
+        $('#addTestPlanDiv').fadeIn(1000);
+    });
+
+    $('#privateOfficeBodyId').on("click","#formForRegistTestPlan input:submit",function() {
+
+        var data = new Array($('#registFormTestPlanName').val(),
+            $('#registFormTestPlanBeginDate').val(),
+            $('#registFormTestPlanEndDate').val(),
+            $('#registFormTestPlanNameOfProject').val());
+
+        $.post('AddTestPlan',{testPlanName: data[0],
+                beginTestPlan: data[1],
+                endTestPlan: data[2],
+                testPlanProjectId: data[3]},
+            function(responseJson) {
+
+                var $table = $('#tableOfTestPlan').last();
+                var $tr1 = $('<tr>').appendTo($table).hide();
+                $('<td>').text("Test plan # " + responseJson[0]).appendTo($tr1);
+                var $tr2 = $('<tr>').appendTo($table).hide();
+                $('<td>').text("Name: " + responseJson[1]).appendTo($tr2);
+                var $tr3 = $('<tr>').appendTo($table).hide();
+                $('<td>').text("Begin date: " + responseJson[2]).appendTo($tr3);
+                var $tr4 = $('<tr>').appendTo($table).hide();
+                $('<td>').text("End date: " + responseJson[3]).appendTo($tr4);
+                var $tr5 = $('<tr>').appendTo($table).hide();
+                $('<td>').text("Project: " + responseJson[4]).appendTo($tr5);
+
+                $tr1.fadeIn(1000);
+                $tr2.fadeIn(1000);
+                $tr3.fadeIn(1000);
+                $tr4.fadeIn(1000);
+                $tr5.fadeIn(1000);
+            });
+
+        recountIndicator($('#SiteContentUserTestCount'));
+
+//        $("#SiteContentUserTestCount").hide();
+//        $("#SiteContentUserTestCount").css({"height": "16px"});
+//
+//        $("#SiteContentUserTestCount").fadeIn(600).animate({
+//            opacity: 1.0,
+//            height: "16px",
+//            display:"toggle"
+//        }, { duration: 1000, queue: false });
+
+        event.preventDefault();
+    });
+
+    function recountIndicator(element){
+        var count = element.text().trim();
+        element.text(++count);
+    }
+
     $('.linkToShowCompanyProject').click(function() {
         $('#tabs').tabs('select', 1);
 
@@ -162,7 +229,7 @@ $(document).ready(function(){
                     var $tr1 = $('<tr>').appendTo($table).hide();
                     $('<td>').text("Project # " + (index+1)).appendTo($tr1);
                     var $tr2 = $('<tr>').appendTo($table).hide();
-                    $('<td>').html("Name: " + '<a href="../jsp/hello.jsp" id="' + project.projectId + '">' + project.name + '</a>').appendTo($tr2);
+                    $('<td>').html("Name: " + '<a class="linkToShowProjectTestPlan" href="#tabs-3" id="' + 'linkToShowTestPlanClikedOnProjectName' + project.projectId + '">' + project.name + '</a>').appendTo($tr2);
                     $('<td>').text("Company: " + project.companyProject).appendTo($tr2);
 
                     $tr1.fadeIn("fast");
@@ -185,6 +252,53 @@ $(document).ready(function(){
 //                $addProjectDiv.id = "addProjectDiv";
 //
 //                $WantToAddProject.appendChild($addProjectDiv);
+            }
+        });
+    });
+
+    $('#privateOfficeBodyId').on("click",'.linkToShowProjectTestPlan',function() {
+        $('#tabs').tabs('select', 2);
+
+        var thenum = this.id.replace( /^\D+/g, '');
+
+        $.ajax({
+            url: 'ShowProjectTestPlan',
+            type: 'POST',
+            dataType: 'json',
+            data: {projectId: thenum},
+            success: function(responseJson) {
+                $('#listOfTestPlan').html("");
+
+                var str = "<p>It\'s the test plan of " + responseJson[0].projectName + " project: </p>";
+                var $ItsTheTestPlanOf = document.createElement("div");
+                $ItsTheTestPlanOf.innerHTML = str;
+                $('#listOfTestPlan').append($ItsTheTestPlanOf);
+
+                var $table = $('<table>').appendTo($ItsTheTestPlanOf);
+                $.each(responseJson, function(index, testPlan) {
+
+                    var $tr1 = $('<tr>').appendTo($table).hide();
+                    $('<td>').text("Test plan # " + (index+1)).appendTo($tr1);
+                    var $tr2 = $('<tr>').appendTo($table).hide();
+                    $('<td>').html("Name: " + '<a href="../jsp/hello.jsp" id="' + testPlan.testPlanId + '">' + testPlan.testPlanName + '</a>').appendTo($tr2);
+                    var $tr3 = $('<tr>').appendTo($table).hide();
+                    $('<td>').text("Begin data: " + testPlan.testPlanBeginData).appendTo($tr3);
+                    var $tr4 = $('<tr>').appendTo($table).hide();
+                    $('<td>').text("End data: " + testPlan.testPlanEndData).appendTo($tr4);
+                    var $tr5 = $('<tr>').appendTo($table).hide();
+                    $('<td>').text("Project: " + testPlan.projectTestPlan).appendTo($tr5);
+
+                    $tr1.fadeIn("fast");
+                    $tr2.fadeIn("fast");
+                    $tr3.fadeIn("fast");
+                    $tr4.fadeIn("fast");
+                    $tr5.fadeIn("fast");
+                });
+
+                var $WantToAddTestPlan = $("<p id='Yourlistoftestplanisempty'>Do you want add test plan? <a class='addTestPlanA' href='#'>Add test plan.</a></p>");
+                $table.after($WantToAddTestPlan);
+                var $addTestPlanDiv = $("<div id='addTestPlanDiv'></div>");
+                $WantToAddTestPlan.after($addTestPlanDiv);
             }
         });
     });

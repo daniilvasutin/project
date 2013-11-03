@@ -3,6 +3,7 @@ package main.java.servletPack;
 import main.java.dto.Company;
 import main.java.dto.Employee;
 import main.java.dto.Project;
+import main.java.dto.TestPlan;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -45,6 +46,10 @@ public class Enter extends HttpServlet{
         if(companies.size() >= 1){
             projects = findProjectInCompany(companies.get(companies.size()-1));
         }
+        List<TestPlan> testPlans = new ArrayList<TestPlan>();
+        if(projects.size() >=1){
+            testPlans = findTestPlansInProject(projects.get(projects.size()-1));
+        }
 
         HttpSession session = req.getSession();
         session.setAttribute("sessionUsername", userName);
@@ -52,6 +57,10 @@ public class Enter extends HttpServlet{
         resp.setContentType("text/html");
         req.setAttribute("companies",companies);
         req.setAttribute("projects", projects);
+        req.setAttribute("testPlans", testPlans);
+        req.setAttribute("companiesCount", companies.size());
+        req.setAttribute("projectsCount", projects.size());
+        req.setAttribute("testPlansCount", testPlans.size());
         req.getRequestDispatcher("jsp/privateOffice.jsp").forward(req, resp);
     }
 
@@ -100,4 +109,30 @@ public class Enter extends HttpServlet{
 
         return projects;
     }
+
+    private List<TestPlan> findTestPlansInProject(Project aProject){
+
+        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("ProjectPersistenceUnit");
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+
+        entityManager.getTransaction().begin();
+
+        System.out.println("!!!!!" + aProject.getProjectId());
+
+        Query query = entityManager.createQuery("SELECT t " +
+                "FROM Project p " +
+                "JOIN p.testPlans t " +
+                "WHERE p.projectId = :projectId").setParameter("projectId", aProject.getProjectId());
+        List<TestPlan> testPlans = query.getResultList();
+
+        entityManager.getTransaction().commit();
+        entityManager.close();
+
+        for(TestPlan plan : testPlans){
+            System.out.println("!!!!!" + plan.getName() + " :: " + plan.getBeginDate() + " :: " + plan.getEndDate());
+        }
+
+        return testPlans;
+    }
+
 }
